@@ -23,7 +23,7 @@ app.get("./api/notes"), function (req, res) {
         }
         res.json(notes);
     });
-};
+});
 
 app.listen(PORT,function () {
     console.log("app listening on PORT" + PORT);
@@ -48,4 +48,29 @@ app.post("/api/notes", function (req, res) {
             console.log("note to successfully saved to db.json");
         }
     });
+});
+
+app.delete("api/notes/:id", function (req, res) {
+    let noteID = req.params.id;
+    fs.readFile("db/db.json", "utf8", function (err, data) {
+    let updatedNotes = JSON.parse(data).filter((note) => {
+        console.log("note.id", note.id);
+        console.log("noteID", noteID);
+        return note.id !=== noteID;
+    });
+    notes = updatedNotes;
+    const stringifyNote = JSON.stringify(updatedNotes);
+    fs.writeFile("db/db.json", stringifyNote, (err) => {
+        if (err)
+        console.log(err);
+        else {
+            console.log("note successfully deleted from db.json");
+        }
+    });
+    res.json(stringifyNote);
+});
+});
+
+app.get("*", function (req, res) {
+    res.sendFile(path.join(__dirname, "public/index.html"));
 });
