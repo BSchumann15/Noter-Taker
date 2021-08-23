@@ -11,3 +11,13 @@ app.use(express.static("public"));
 
 let notes = require("./db/db.json")
 
+app.get("./api/notes"), function (req, res) {
+    fs.readFile("db/db.json", "utf8", function (err, data) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        res.json(notes);
+    });
+};
+
